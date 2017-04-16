@@ -10,8 +10,24 @@ var MatchGame = {};
  */
 
 MatchGame.generateCardValues = function () {
-
-};
+//create array of numbers 1 to 8 twice
+  var orderedNumber = [];
+  for (var i = 1; i < 9; i++) {
+  //return the Array
+    orderedNumber.push(i,i);
+    console.log(orderedNumber);
+  };// ./for
+//create the random generated array that includes
+  var randomNumber=[];
+    while (orderedNumber.length) {
+      var randomIndex = Math.floor(Math.random() * orderedNumber.length);
+      randomNumber.push(orderedNumber[randomIndex]);
+      orderedNumber.splice(randomIndex,1);
+      console.log(orderedNumber.length);
+    }// ./while
+    return randomNumber;
+    console.log(randomNumber);
+}; // ./fx
 
 /*
   Converts card values to jQuery card objects and adds them to the supplied game
