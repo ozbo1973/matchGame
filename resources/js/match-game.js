@@ -1,3 +1,8 @@
+$(document).ready(function(){
+  MatchGame.renderCards(MatchGame.generateCardValues(),$('#game'));
+}) // ./ready
+
+
 var MatchGame = {};
 
 /*
@@ -23,7 +28,6 @@ MatchGame.generateCardValues = function () {
       var randomIndex = Math.floor(Math.random() * orderedNumber.length);
       randomNumber.push(orderedNumber[randomIndex]);
       orderedNumber.splice(randomIndex,1);
-      console.log(orderedNumber.length);
     }// ./while
     return randomNumber;
     console.log(randomNumber);
@@ -35,6 +39,20 @@ MatchGame.generateCardValues = function () {
 */
 
 MatchGame.renderCards = function(cardValues, $game) {
+  var hslValues = [25,55,90,160,220,265,310,360];
+//empty the card values
+  $game.empty();
+//generate card values and styles
+  $.each(cardValues,function(i,v){
+    var $newCard= $('<div class="col-xs-3 card"></div>');
+    $newCard.data("value",v);
+    $newCard.data("flipped",false);
+    $newCard.data('color',hslValues[v-1] );
+    $game.append($newCard);
+    console.log($newCard);
+  })// ./ each
+
+//add the card objects to the game object
 
 };
 
