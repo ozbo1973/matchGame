@@ -20,7 +20,7 @@ MatchGame.generateCardValues = function () {
   for (var i = 1; i < 9; i++) {
   //return the Array
     orderedNumber.push(i,i);
-    console.log(orderedNumber);
+    // console.log(orderedNumber);
   };// ./for
 //create the random generated array that includes
   var randomNumber=[];
@@ -30,7 +30,7 @@ MatchGame.generateCardValues = function () {
       orderedNumber.splice(randomIndex,1);
     }// ./while
     return randomNumber;
-    console.log(randomNumber);
+    // console.log(randomNumber);
 }; // ./fx
 
 /*
@@ -40,6 +40,7 @@ MatchGame.generateCardValues = function () {
 
 MatchGame.renderCards = function(cardValues, $game) {
   var hslValues = [25,55,90,160,220,265,310,360];
+  $game.data('flippedCards', []);
 //empty the card values
   $game.empty();
 //generate card values and styles
@@ -48,12 +49,17 @@ MatchGame.renderCards = function(cardValues, $game) {
     $newCard.data("value",v);
     $newCard.data("flipped",false);
     $newCard.data('color',hslValues[v-1] );
+//console.log($newCard.data('color') + " " + $newCard.data('value'));
+  //add the card objects to the game object
     $game.append($newCard);
-    console.log($newCard);
+//console.log($newCard);
   })// ./ each
 
-//add the card objects to the game object
-
+  $('.card').click(function(){
+    MatchGame.flipCard($(this),$game);
+//console.log($(this));
+  })
+//console.log($game.data('flippedCards'));
 };
 
 /*
@@ -62,5 +68,34 @@ MatchGame.renderCards = function(cardValues, $game) {
  */
 
 MatchGame.flipCard = function($card, $game) {
+/* check to see if flipped is true, if false turn card over and reveal number
+if true change css back to regular
+*/
+  var currentFlipped = $game.data('flippedCards')
 
+  if (!$card.data('flipped')) {
+      $card.css('background-color', "hsl(" + $card.data("color") + ",85%,65%)");
+      $card.text($card.data("value"));
+      $card.data("flipped",true);
+      currentFlipped.push($card);
+      $game.data("flippedCards",currentFlipped);
+  } // ./if
+
+//check the cards to see if they are matched and change to matched or flip back over
+  setTimeout(function(){
+    if(currentFlipped.length===2){
+      $.each(currentFlipped,function(index, el) {
+        if(currentFlipped[0].data('value')===currentFlipped[1].data('value')) {
+          $(this).css('color', 'rgb(204,204,204)').css('background-color', 'rgb(153,153,153)');
+        } else {
+        //flip cards back over
+            $(this).data('flipped', false);
+            $(this).css('background-color', 'rgb(32,64,86)');
+            $(this).text('');
+        }// ./else if
+      });// ./each
+        currentFlipped=[];
+        $game.data("flippedCards",currentFlipped);
+     }// ./if
+  }, 400);//./timeout
 };
